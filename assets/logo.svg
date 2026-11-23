@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Original logo: an isometric cube split into a 2x2 lattice with an amber core -->
+  <polygon points="32,4 58,19 32,34 6,19" fill="#3fb6a8"/>
+  <polygon points="6,19 32,34 32,62 6,47" fill="#1f6f6a"/>
+  <polygon points="58,19 32,34 32,62 58,47" fill="#2a8f86"/>
+  <g stroke="#0f1418" stroke-width="1.6" fill="none" opacity=".55">
+    <path d="M19,11.5 45,26.5 M45,11.5 19,26.5"/>
+    <path d="M19,26.5 19,54.5 M6,33 32,48"/>
+    <path d="M45,26.5 45,54.5 M58,33 32,48"/>
+  </g>
+  <polygon points="32,26 39,30 32,34 25,30" fill="#f2a541"/>
+</svg>

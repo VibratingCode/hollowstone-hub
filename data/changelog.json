@@ -1,0 +1,22 @@
+{
+  "_help": "Newest first. type is one of: added, changed, fixed, removed.",
+  "releases": [
+    {
+      "version": "Unreleased",
+      "date": "",
+      "items": [
+        { "type": "added", "text": "Nothing in the game yet. Engine work starts in M0." }
+      ]
+    },
+    {
+      "version": "0.0.1",
+      "date": "2026-11-22",
+      "title": "The Dev Hub",
+      "items": [
+        { "type": "added", "text": "Dev hub site with devlog, roadmap board, and changelog." },
+        { "type": "added", "text": "Originality rules to keep the project legally distinct." },
+        { "type": "added", "text": "Initial roadmap: milestones M0 to M7." }
+      ]
+    }
+  ]
+}

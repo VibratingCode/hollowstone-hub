@@ -1,0 +1,13 @@
+{
+  "_help": "Newest first. file is the markdown file in /posts.",
+  "posts": [
+    {
+      "slug": "devlog-0-starting-over",
+      "title": "Devlog #0: Starting over",
+      "date": "2026-11-22",
+      "tags": ["meta", "plan"],
+      "summary": "The old build is stuck behind an 8-hour transfer, so we're rebuilding from zero, with backups this time.",
+      "file": "2026-11-22-devlog-0.md"
+    }
+  ]
+}

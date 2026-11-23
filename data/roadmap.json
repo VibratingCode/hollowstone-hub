@@ -1,0 +1,57 @@
+{
+  "_help": "status is one of: idea, todo, doing, done. milestone must match a milestone id.",
+  "milestones": [
+    { "id": "m0", "name": "M0 · Foundations", "goal": "Repo, dev hub, tech stack locked in, render loop running." },
+    { "id": "m1", "name": "M1 · Terrain", "goal": "Infinite chunked world generated from noise, meshed efficiently." },
+    { "id": "m2", "name": "M2 · Player", "goal": "Walk, jump, collide, break and place blocks." },
+    { "id": "m3", "name": "M3 · Persistence", "goal": "Worlds save and load; never lose a build again." },
+    { "id": "m4", "name": "M4 · Original Content", "goal": "Our own block set, art, sounds and names." },
+    { "id": "m5", "name": "M5 · Living World", "goal": "Day/night, weather, original creatures." },
+    { "id": "m6", "name": "M6 · Making Things", "goal": "Inventory and a crafting system that is our own design." },
+    { "id": "m7", "name": "M7 · Polish & Release", "goal": "Menus, settings, performance, first public build." }
+  ],
+  "tasks": [
+    { "title": "Set up dev hub site (devlog / roadmap / changelog)", "milestone": "m0", "status": "done", "tag": "meta" },
+    { "title": "Write originality rules", "milestone": "m0", "status": "done", "tag": "legal" },
+    { "title": "Pick final project name (Hollowstone)", "milestone": "m0", "status": "done", "tag": "meta" },
+    { "title": "Lock tech stack (three.js + Vite?)", "milestone": "m0", "status": "doing", "tag": "engine" },
+    { "title": "Basic scene, camera and render loop", "milestone": "m0", "status": "todo", "tag": "engine" },
+    { "title": "Backup strategy: push to GitHub every session", "milestone": "m0", "status": "todo", "tag": "meta", "note": "Lesson learned. Never again." },
+
+    { "title": "Chunk data structure (16×16×N, typed arrays)", "milestone": "m1", "status": "todo", "tag": "engine" },
+    { "title": "Seeded noise heightmap", "milestone": "m1", "status": "todo", "tag": "worldgen" },
+    { "title": "Face-culled chunk meshing", "milestone": "m1", "status": "todo", "tag": "engine" },
+    { "title": "Greedy meshing", "milestone": "m1", "status": "todo", "tag": "perf" },
+    { "title": "Chunk streaming around player", "milestone": "m1", "status": "todo", "tag": "engine" },
+    { "title": "Mesh generation in Web Workers", "milestone": "m1", "status": "todo", "tag": "perf" },
+    { "title": "Caves, biomes, water level", "milestone": "m1", "status": "todo", "tag": "worldgen" },
+
+    { "title": "First-person controller + pointer lock", "milestone": "m2", "status": "todo", "tag": "gameplay" },
+    { "title": "AABB collision against voxels", "milestone": "m2", "status": "todo", "tag": "gameplay" },
+    { "title": "Voxel raycast for block targeting", "milestone": "m2", "status": "todo", "tag": "gameplay" },
+    { "title": "Break / place blocks, remesh affected chunks", "milestone": "m2", "status": "todo", "tag": "gameplay" },
+
+    { "title": "Save edited chunks to IndexedDB", "milestone": "m3", "status": "todo", "tag": "engine" },
+    { "title": "World select / create / delete menu", "milestone": "m3", "status": "todo", "tag": "ui" },
+    { "title": "Export / import world file", "milestone": "m3", "status": "todo", "tag": "engine" },
+
+    { "title": "Design original block list and names", "milestone": "m4", "status": "todo", "tag": "content" },
+    { "title": "Original texture atlas (hand-made or procedural)", "milestone": "m4", "status": "todo", "tag": "art" },
+    { "title": "Original sound effects", "milestone": "m4", "status": "todo", "tag": "audio" },
+
+    { "title": "Day/night cycle and sky", "milestone": "m5", "status": "todo", "tag": "world" },
+    { "title": "Original creature designs (no lookalikes)", "milestone": "m5", "status": "todo", "tag": "content" },
+    { "title": "Simple creature AI and pathfinding", "milestone": "m5", "status": "todo", "tag": "gameplay" },
+
+    { "title": "Hotbar and inventory", "milestone": "m6", "status": "todo", "tag": "ui" },
+    { "title": "Design our own crafting system", "milestone": "m6", "status": "todo", "tag": "design" },
+
+    { "title": "Settings menu (FOV, render distance, keys)", "milestone": "m7", "status": "todo", "tag": "ui" },
+    { "title": "Performance pass", "milestone": "m7", "status": "todo", "tag": "perf" },
+    { "title": "Deploy playable build to GitHub Pages", "milestone": "m7", "status": "todo", "tag": "release" },
+
+    { "title": "Multiplayer (WebRTC / WebSocket)", "milestone": "m7", "status": "idea", "tag": "stretch" },
+    { "title": "Modding API", "milestone": "m7", "status": "idea", "tag": "stretch" },
+    { "title": "Signature mechanic that makes this game its own", "milestone": "m4", "status": "idea", "tag": "design" }
+  ]
+}
