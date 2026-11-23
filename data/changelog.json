@@ -5,7 +5,57 @@
       "version": "Unreleased",
       "date": "",
       "items": [
-        { "type": "added", "text": "Nothing in the game yet. Engine work starts in M0." }
+        {
+          "type": "added",
+          "text": "Next: Web Worker meshing, survival mining, day/night."
+        }
+      ]
+    },
+    {
+      "version": "0.1.3",
+      "date": "2026-11-23",
+      "title": "First playable build",
+      "items": [
+        {
+          "type": "added",
+          "text": "Playable in the browser at [vibratingcode.github.io/hollowstone](https://vibratingcode.github.io/hollowstone/)."
+        },
+        {
+          "type": "added",
+          "text": "Endless seeded world in 16×16×128 chunks, streamed around the player."
+        },
+        {
+          "type": "added",
+          "text": "Biomes: Meadow, Duskwood, Dunes, Frostland, Peaks, Shore, Ocean."
+        },
+        {
+          "type": "added",
+          "text": "Caves and the hollows: deep caverns lit by Lumen crystals with real block light."
+        },
+        {
+          "type": "added",
+          "text": "19 original blocks with procedurally painted textures."
+        },
+        {
+          "type": "added",
+          "text": "Smooth ambient occlusion, sky light, gradient sky and underwater fog."
+        },
+        {
+          "type": "added",
+          "text": "Walking, sprinting, sneaking, swimming and flying with voxel collision."
+        },
+        {
+          "type": "added",
+          "text": "Break, place and pick blocks; 9-slot hotbar and block picker (E)."
+        },
+        {
+          "type": "added",
+          "text": "Automatic saves in IndexedDB; world list to create, play and delete worlds."
+        },
+        {
+          "type": "added",
+          "text": "Settings: render distance, field of view, mouse sensitivity."
+        }
       ]
     },
     {
@@ -13,9 +63,18 @@
       "date": "2026-11-22",
       "title": "The Dev Hub",
       "items": [
-        { "type": "added", "text": "Dev hub site with devlog, roadmap board, and changelog." },
-        { "type": "added", "text": "Originality rules to keep the project legally distinct." },
-        { "type": "added", "text": "Initial roadmap: milestones M0 to M7." }
+        {
+          "type": "added",
+          "text": "Dev hub site with devlog, roadmap board, and changelog."
+        },
+        {
+          "type": "added",
+          "text": "Originality rules to keep the project legally distinct."
+        },
+        {
+          "type": "added",
+          "text": "Initial roadmap: milestones M0 to M7."
+        }
       ]
     }
   ]
