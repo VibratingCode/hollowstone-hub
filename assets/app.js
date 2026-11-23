@@ -148,51 +148,166 @@
     return { done: done, total: real.length, p: pct(done, real.length) };
   }
 
-  async function viewHome(site) {
-    const [posts, road, log] = await Promise.all([
-      load("posts/index.json"), load("data/roadmap.json"), load("data/changelog.json")
-    ]);
-    const s = stats(road.tasks);
-    const doing = road.tasks.filter(function (t) { return t.status === "doing"; });
-    const latest = (log.releases || []).find(function (r) { return r.version !== "Unreleased"; });
-    const current = road.milestones.find(function (m) {
-      return road.tasks.some(function (t) { return t.milestone === m.id && t.status !== "done" && t.status !== "idea"; });
-    });
+  // ---------- studio home ----------
+  function coverHtml(p, cls) {
+    const style = "--accent:" + esc(p.accent || "#3fb6a8");
+    if (p.cover) {
+      return '<div class="' + cls + ' has-img" style="' + style + '"><img src="' + esc(p.cover) + '" alt="" loading="lazy"></div>';
+    }
+    return '<div class="' + cls + ' no-img" style="' + style + '">' +
+      (p.icon ? '<img class="cover-icon" src="' + esc(p.icon) + '" alt="">' : '<span class="cover-letter">' + esc(p.name[0]) + "</span>") +
+      "</div>";
+  }
 
-    return '<section class="hero">' +
+  function kindBadge(p) {
+    return '<span class="kind kind-' + esc((p.kind || "").toLowerCase()) + '">' + esc(p.kind) + "</span>";
+  }
+
+  async function viewHome(site) {
+    const data = await load("data/projects.json");
+    const kinds = Array.from(new Set(data.projects.map(function (p) { return p.kind; })));
+    return '<section class="studio-hero">' +
         '<div class="hero-cubes" aria-hidden="true">' + "<i></i>".repeat(9) + "</div>" +
+        '<p class="eyebrow">' + data.projects.length + " projects</p>" +
         "<h1>" + esc(site.name) + "</h1>" +
         '<p class="tagline">' + esc(site.tagline) + "</p>" +
-        '<div class="hero-actions">' +
-          (site.play_url ? '<a class="btn primary" href="' + esc(site.play_url) + '">▶ Play</a>' : '<span class="btn disabled" title="No playable build yet">▶ Play (soon)</span>') +
-          '<a class="btn" href="#/roadmap">Roadmap</a>' +
-          '<a class="btn" href="#/devlog">Devlog</a>' +
-        "</div>" +
+        (site.intro ? '<p class="intro">' + esc(site.intro) + "</p>" : "") +
       "</section>" +
+      '<div class="filters" data-filter-group="kind"><button class="chip active" data-val="">All</button>' +
+        kinds.map(function (k) { return '<button class="chip" data-val="' + esc(k) + '">' + esc(k) + "s</button>"; }).join("") +
+      "</div>" +
+      '<section class="project-grid">' + data.projects.map(function (p) {
+        return '<a class="project-card" data-kind="' + esc(p.kind) + '" href="#/p/' + encodeURIComponent(p.id) + '" style="--accent:' + esc(p.accent || "#3fb6a8") + '">' +
+          coverHtml(p, "pc-cover") +
+          '<div class="pc-body">' +
+            '<div class="pc-meta">' + kindBadge(p) + '<span class="status-pill">' + esc((p.facts && p.facts.Status) || "") + "</span>" +
+              (p.private ? '<span class="private-pill" title="Source is in a private repository">Private</span>' : "") + "</div>" +
+            "<h3>" + esc(p.name) + "</h3>" +
+            "<p>" + esc(p.summary || p.tagline) + "</p>" +
+            '<span class="pc-platform">' + esc((p.facts && p.facts.Platform) || "") + "</span>" +
+          "</div></a>";
+      }).join("") + "</section>";
+  }
 
-      '<section class="grid-3">' +
-        '<div class="card stat"><div class="label">Status</div><div class="value small">' + esc(site.status) + "</div></div>" +
-        '<div class="card stat"><div class="label">Latest version</div><div class="value">' + (latest ? "v" + esc(latest.version) : "n/a") + '</div><div class="muted">' + (latest ? fmtDate(latest.date) : "") + "</div></div>" +
-        '<div class="card stat"><div class="label">Overall progress</div><div class="value">' + s.p + '%</div>' + bar(s.p, "Overall progress") + '<div class="muted">' + s.done + " / " + s.total + " tasks</div></div>" +
-      "</section>" +
+  // ---------- project page ----------
+  function linkBtn(l) {
+    const ext = /^https?:/i.test(l.url);
+    return '<a class="btn' + (l.primary ? " primary" : "") + '" href="' + esc(l.url) + '"' +
+      (ext ? ' target="_blank" rel="noopener"' : "") + ">" + (l.primary && /play/i.test(l.label) ? "▶ " : "") + esc(l.label) + (ext && !l.primary ? " ↗" : "") + "</a>";
+  }
 
-      '<section class="grid-2">' +
-        '<div class="card"><h2>Now building</h2>' +
-          (current ? '<p class="muted">' + esc(current.name) + ": " + esc(current.goal) + "</p>" : "") +
-          (doing.length ? '<ul class="doing-list">' + doing.map(function (t) { return '<li><span class="dot doing"></span>' + esc(t.title) + "</li>"; }).join("") + "</ul>" : '<p class="muted">Nothing in progress right now.</p>') +
-          '<a class="more" href="#/roadmap">Full roadmap →</a></div>' +
-        '<div class="card"><h2>Latest devlog</h2>' +
-          (posts.posts.length ? posts.posts.slice(0, 3).map(function (p) {
-            return '<a class="mini-post" href="#/devlog/' + encodeURIComponent(p.slug) + '"><span>' + esc(p.title) + '</span><span class="muted">' + fmtDate(p.date) + "</span></a>";
-          }).join("") : '<p class="muted">No posts yet.</p>') +
-          '<a class="more" href="#/devlog">All posts →</a></div>' +
-      "</section>";
+  async function hollowstoneRoadmap() {
+    const [road, posts] = await Promise.all([load("data/roadmap.json"), load("posts/index.json")]);
+    const items = road.milestones.map(function (m) {
+      const tasks = road.tasks.filter(function (t) { return t.milestone === m.id && t.status !== "idea"; });
+      const s = stats(tasks);
+      const status = s.total && s.done === s.total ? "done" : tasks.some(function (t) { return t.status === "doing" || t.status === "done"; }) ? "doing" : "planned";
+      return { title: m.name, text: m.goal, status: status, p: s.p };
+    });
+    const doing = road.tasks.filter(function (t) { return t.status === "doing"; });
+    const todo = road.tasks.filter(function (t) { return t.status === "todo"; });
+    const next = doing.concat(todo).slice(0, 4).map(function (t) { return t.title; });
+    return { items: items, next: next, posts: posts.posts };
+  }
+
+  function roadmapHtml(items, draft) {
+    const groups = [
+      { id: "done", name: "Shipped" },
+      { id: "doing", name: "In progress" },
+      { id: "planned", name: "Planned" }
+    ];
+    const total = items.length, done = items.filter(function (i) { return i.status === "done"; }).length;
+    return '<div class="rm-summary"><span><strong>' + done + "</strong> of " + total + " milestones shipped</span>" + bar(pct(done, total), "Roadmap progress") + "</div>" +
+      '<div class="timeline">' + groups.map(function (g) {
+        const list = items.filter(function (i) { return i.status === g.id; });
+        if (!list.length) return "";
+        return '<div class="tl-group tl-' + g.id + '"><h3><span class="dot ' + (g.id === "planned" ? "todo" : g.id) + '"></span>' + g.name +
+          (g.id === "planned" && draft ? ' <span class="draft-tag" title="Not confirmed yet">Draft</span>' : "") + "</h3>" +
+          "<ol>" + list.map(function (i) {
+            return '<li><div class="tl-title">' + esc(i.title) + "</div>" +
+              (i.text ? '<div class="tl-text">' + esc(i.text) + "</div>" : "") +
+              (typeof i.p === "number" && g.id === "doing" ? bar(i.p) : "") + "</li>";
+          }).join("") + "</ol></div>";
+      }).join("") + "</div>";
+  }
+
+  async function viewProject(id) {
+    const data = await load("data/projects.json");
+    const idx = data.projects.findIndex(function (p) { return p.id === id; });
+    if (idx < 0) return notFound();
+    const p = data.projects[idx];
+    document.title = p.name + " · " + (site ? site.name : "");
+    const accent = esc(p.accent || "#3fb6a8");
+
+    let roadItems = p.roadmap || [], next = p.next || [], hs = null;
+    if (p.roadmapSource === "hollowstone") {
+      hs = await hollowstoneRoadmap();
+      roadItems = hs.items; next = hs.next;
+    }
+
+    const hero = '<section class="p-hero' + (p.cover ? " with-cover" : "") + '" style="--accent:' + accent + '">' +
+      (p.cover ? '<img class="p-hero-bg" src="' + esc(p.cover) + '" alt="">' : '<div class="p-hero-glow"></div>') +
+      '<div class="p-hero-inner">' +
+        (p.icon ? '<img class="p-icon" src="' + esc(p.icon) + '" alt="">' : "") +
+        '<div><div class="pc-meta">' + kindBadge(p) + '<span class="status-pill">' + esc((p.facts && p.facts.Status) || "") + "</span>" +
+          (p.private ? '<span class="private-pill">Private source</span>' : "") + "</div>" +
+        "<h1>" + esc(p.name) + "</h1>" +
+        '<p class="p-tagline">' + esc(p.tagline) + "</p>" +
+        '<div class="hero-actions">' + (p.links || []).map(linkBtn).join("") + "</div></div>" +
+      "</div></section>";
+
+    const subnav = '<nav class="p-subnav"><a href="#about" data-jump="about">About</a><a href="#features" data-jump="features">Features</a>' +
+      '<a href="#roadmap" data-jump="roadmap">Roadmap</a><a href="#next" data-jump="next">Next up</a></nav>';
+
+    const facts = p.facts ? '<aside class="card facts"><h2>At a glance</h2><dl>' + Object.keys(p.facts).map(function (k) {
+      return "<dt>" + esc(k) + "</dt><dd>" + esc(p.facts[k]) + "</dd>";
+    }).join("") + "</dl></aside>" : "";
+
+    const about = '<section id="about" class="p-section p-about"><div class="prose-lite"><h2 class="sec-title">About</h2>' +
+      (p.description || []).map(function (d) { return "<p>" + inline(d) + "</p>"; }).join("") + "</div>" + facts + "</section>";
+
+    const gal = p.gallery || [];
+    const gallery = gal.length
+      ? '<div class="gallery" data-count="' + gal.length + '">' + gal.map(function (g, i) {
+          return '<figure class="shot' + (i === 0 ? " main" : "") + '"><button class="shot-btn" data-src="' + esc(g.src) + '" data-cap="' + esc(g.caption || "") + '" aria-label="Enlarge: ' + esc(g.caption || "screenshot") + '">' +
+            '<img src="' + esc(g.src) + '" alt="' + esc(g.caption || "") + '" loading="lazy"></button>' +
+            (g.caption ? "<figcaption>" + esc(g.caption) + "</figcaption>" : "") + "</figure>";
+        }).join("") + "</div>"
+      : '<div class="no-shots" style="--accent:' + accent + '">' + (p.icon ? '<img src="' + esc(p.icon) + '" alt="">' : "") + "<p>" + esc(p.noShots || "Screenshots coming soon.") + "</p></div>";
+
+    const features = '<section id="features" class="p-section"><h2 class="sec-title">Features</h2>' + gallery +
+      '<div class="feature-grid">' + (p.features || []).map(function (f) {
+        return '<div class="feature"><h3>' + esc(f.title) + "</h3><p>" + esc(f.text) + "</p></div>";
+      }).join("") + "</div></section>";
+
+    const roadmap = '<section id="roadmap" class="p-section"><div class="sec-head"><h2 class="sec-title">Roadmap</h2>' +
+      (hs ? '<a class="more" href="#/roadmap">Full task board →</a>' : "") + "</div>" +
+      (roadItems.length ? roadmapHtml(roadItems, p.roadmapDraft) : '<p class="muted">Roadmap coming soon.</p>') + "</section>";
+
+    const nextUp = '<section id="next" class="p-section"><h2 class="sec-title">Next up' +
+      (p.roadmapDraft ? ' <span class="draft-tag">Draft</span>' : "") + "</h2>" +
+      (next.length ? '<div class="next-grid">' + next.map(function (n, i) {
+        return '<div class="next-card' + (i === 0 ? " first" : "") + '" style="--accent:' + accent + '"><span class="next-num">' + (i === 0 ? "Up next" : "Then") + "</span><strong>" + esc(n) + "</strong></div>";
+      }).join("") + "</div>" : '<p class="muted">To be decided.</p>') + "</section>";
+
+    const devlog = hs && hs.posts.length ? '<section class="p-section"><div class="sec-head"><h2 class="sec-title">From the devlog</h2><a class="more" href="#/devlog">All posts →</a></div>' +
+      '<div class="post-list">' + hs.posts.slice(0, 3).map(postCard).join("") + "</div></section>" : "";
+
+    const prev = data.projects[(idx - 1 + data.projects.length) % data.projects.length];
+    const nxt = data.projects[(idx + 1) % data.projects.length];
+    const pager = '<nav class="post-nav wide"><a href="#/p/' + encodeURIComponent(prev.id) + '">← ' + esc(prev.name) + '</a><a href="#/">All projects</a><a href="#/p/' + encodeURIComponent(nxt.id) + '">' + esc(nxt.name) + " →</a></nav>";
+
+    return '<div class="project-page" style="--accent:' + accent + '">' + hero + subnav + about + features + roadmap + nextUp + devlog + pager + "</div>";
+  }
+
+  function hsCrumb(label) {
+    return '<div class="crumb"><a href="#/p/hollowstone">Hollowstone</a> <span>›</span> ' + esc(label) + "</div>";
   }
 
   async function viewDevlog() {
     const posts = await load("posts/index.json");
     const tags = Array.from(new Set(posts.posts.flatMap(function (p) { return p.tags || []; }))).sort();
-    return '<h1 class="page-title">Devlog</h1>' +
+    return hsCrumb("Devlog") + '<h1 class="page-title">Hollowstone Devlog</h1>' +
       '<div class="filters" data-filter-group="tag"><button class="chip active" data-val="">All</button>' +
       tags.map(function (t) { return '<button class="chip" data-val="' + esc(t) + '">' + esc(t) + "</button>"; }).join("") + "</div>" +
       '<div class="post-list">' + (posts.posts.length ? posts.posts.map(function (p) {
@@ -209,7 +324,7 @@
     const newer = posts.posts[idx - 1], older = posts.posts[idx + 1];
     document.title = p.title + " · " + (site ? site.name : "Dev Hub");
     return '<article class="prose post">' +
-      '<a class="back" href="#/devlog">← Devlog</a>' +
+      '<div class="crumb"><a href="#/p/hollowstone">Hollowstone</a> <span>›</span> <a href="#/devlog">Devlog</a></div>' +
       '<div class="meta">' + fmtDate(p.date) + " " + tagList(p.tags) + "</div>" +
       markdown(md) + "</article>" +
       '<nav class="post-nav">' +
@@ -250,7 +365,7 @@
         }).join("") + "</div>";
     }).join("");
 
-    return '<h1 class="page-title">Roadmap</h1>' +
+    return hsCrumb("Task board") + '<h1 class="page-title">Hollowstone Task Board</h1>' +
       '<section class="milestones">' + milestoneRows + "</section>" +
       '<div class="board-head"><h2>Board</h2><span class="muted" id="ms-filter-label">All milestones</span>' +
       '<button class="chip" id="ms-clear" hidden>Show all</button></div>' +
@@ -260,7 +375,7 @@
   async function viewChangelog() {
     const log = await load("data/changelog.json");
     const order = ["added", "changed", "fixed", "removed"];
-    return '<h1 class="page-title">Changelog</h1>' +
+    return hsCrumb("Changelog") + '<h1 class="page-title">Hollowstone Changelog</h1>' +
       (log.releases || []).map(function (r) {
         const groups = order.map(function (type) {
           const items = (r.items || []).filter(function (it) { return it.type === type; });
@@ -278,7 +393,7 @@
 
   async function viewOriginality() {
     const md = await load("data/originality.md", true);
-    return '<article class="prose">' + markdown(md) + "</article>";
+    return '<article class="prose">' + hsCrumb("Originality rules") + markdown(md) + "</article>";
   }
 
   function notFound() {
@@ -296,6 +411,44 @@
         });
       });
     });
+  }
+
+  function wireHome() {
+    app.querySelectorAll('[data-filter-group="kind"] .chip').forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        const val = btn.dataset.val;
+        app.querySelectorAll('[data-filter-group="kind"] .chip').forEach(function (b) { b.classList.toggle("active", b === btn); });
+        app.querySelectorAll(".project-card").forEach(function (el) { el.hidden = !!val && el.dataset.kind !== val; });
+      });
+    });
+  }
+
+  function wireProject() {
+    app.querySelectorAll("[data-jump]").forEach(function (a) {
+      a.addEventListener("click", function (e) {
+        e.preventDefault();
+        const t = document.getElementById(a.dataset.jump);
+        if (t) t.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+    const lb = document.getElementById("lightbox");
+    const shots = Array.from(app.querySelectorAll(".shot-btn"));
+    let cur = 0;
+    function show(i) {
+      cur = (i + shots.length) % shots.length;
+      lb.querySelector("img").src = shots[cur].dataset.src;
+      lb.querySelector("img").alt = shots[cur].dataset.cap;
+      lb.querySelector(".lb-cap").textContent = shots[cur].dataset.cap;
+      lb.hidden = false;
+    }
+    shots.forEach(function (b, i) { b.addEventListener("click", function () { show(i); }); });
+    lb.onclick = function (e) { if (e.target === lb || e.target.classList.contains("lb-close")) lb.hidden = true; };
+    document.onkeydown = function (e) {
+      if (lb.hidden) return;
+      if (e.key === "Escape") lb.hidden = true;
+      if (e.key === "ArrowRight") show(cur + 1);
+      if (e.key === "ArrowLeft") show(cur - 1);
+    };
   }
 
   function wireRoadmap() {
@@ -327,15 +480,19 @@
     const hash = location.hash.replace(/^#\/?/, "");
     const parts = hash.split("/").filter(Boolean).map(decodeURIComponent);
     const page = parts[0] || "home";
+    const navKey = page === "p" ? (parts[1] === "hollowstone" ? "hollowstone" : "home")
+      : (["roadmap", "changelog", "originality"].indexOf(page) >= 0 ? "hollowstone" : page);
     document.querySelectorAll(".nav a").forEach(function (a) {
-      a.classList.toggle("active", a.dataset.route === page);
+      a.classList.toggle("active", a.dataset.route === navKey);
     });
     document.querySelector(".nav").classList.remove("open");
-    document.title = (site ? site.name : "Dev Hub") + " · Dev Hub";
+    const lbx = document.getElementById("lightbox"); if (lbx) lbx.hidden = true;
+    document.title = site ? site.name : "VibratingCode";
 
     try {
       let html;
       if (page === "home") html = await viewHome(site);
+      else if (page === "p" && parts[1]) html = await viewProject(parts[1]);
       else if (page === "devlog" && parts[1]) html = await viewPost(parts[1]);
       else if (page === "devlog") html = await viewDevlog();
       else if (page === "roadmap") html = await viewRoadmap();
@@ -343,6 +500,8 @@
       else if (page === "originality") html = await viewOriginality();
       else html = notFound();
       app.innerHTML = html;
+      if (page === "home") wireHome();
+      if (page === "p") wireProject();
       if (page === "devlog" && !parts[1]) wireDevlog();
       if (page === "roadmap") wireRoadmap();
       window.scrollTo(0, 0);
@@ -357,9 +516,12 @@
     try {
       site = await load("data/site.json");
     } catch (e) {
-      site = { name: "Dev Hub", tagline: "", status: "", repo: "" };
+      site = { name: "VibratingCode", tagline: "", repo: "" };
     }
     document.querySelectorAll('[data-site="name"]').forEach(function (el) { el.textContent = site.name; });
+    document.querySelectorAll('[data-site="github"]').forEach(function (el) {
+      if (site.github) el.href = site.github; else el.remove();
+    });
     document.querySelectorAll('[data-site="repo"]').forEach(function (el) {
       if (site.repo) el.href = site.repo; else el.remove();
     });

@@ -1,7 +1,7 @@
 {
-  "name": "Hollowstone",
-  "tagline": "An original block-building sandbox, built from scratch in the browser.",
-  "repo": "https://github.com/VibratingCode/hollowstone-hub",
-  "play_url": "",
-  "status": "Pre-alpha: rebuilding the foundations"
+  "name": "VibratingCode",
+  "tagline": "Games, tools and strange little programs, built from scratch.",
+  "intro": "Shooters, sandboxes, worldbuilding studios and desktop helpers. Every project lives here with what it does today and what's coming next.",
+  "repo": "https://github.com/VibratingCode",
+  "github": "https://github.com/VibratingCode"
 }
