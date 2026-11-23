@@ -7,18 +7,18 @@
       "kind": "Game",
       "accent": "#3fb6a8",
       "icon": "assets/logo.svg",
-      "tagline": "An original block-building sandbox, built from scratch in the browser.",
-      "summary": "Dig, build and explore an endless voxel world with violet Duskwood forests and glowing underground hollows. Playable now in your browser.",
+      "tagline": "An original block-building sandbox with real light: sunsets, shadows, fireflies and glowing caverns, in your browser.",
+      "summary": "Dig, build and explore an endless voxel world with day and night, real-time shadows, violet forests and Lumen-lit hollows. Playable now in your browser.",
       "description": [
         "Hollowstone is an open-world block-building sandbox that runs right in your browser. The world is endless and made of blocks: dig down, build up, and explore a landscape generated from a seed.",
-        "Above ground you'll find meadows, violet Duskwood forests, dunes, frostlands, peaks and open ocean. Below are winding caves and the **hollows**: huge caverns lit by glowing Lumen crystals.",
-        "The genre is familiar, but everything inside it is our own: 19 original blocks with procedurally painted textures, our own names, and a written set of originality rules."
+        "Version 0.2 is a full visual overhaul. The sun crosses the sky and casts real shadows, sunsets glow, stars and fireflies come out at night, water ripples and reflects the sky, and leaves and grass sway in the wind.",
+        "Below ground are the **hollows**: huge caverns lit by Lumen crystals and Glowcap mushrooms, with teal motes drifting through the dark. Everything is original: our own blocks, names and code-painted textures, under a written set of originality rules."
       ],
       "facts": {
         "Platform": "Web browser",
-        "Built with": "three.js (no build step)",
+        "Built with": "three.js, Web Workers (no build step)",
         "Status": "Alpha · playable",
-        "Version": "0.1.3"
+        "Version": "0.2.0"
       },
       "links": [
         {
@@ -49,55 +49,79 @@
       ],
       "gallery": [
         {
-          "src": "assets/projects/hollowstone/build.jpg",
-          "caption": "A claybrick cottage with a timber roof, glass windows and Lumen lamps, at the edge of a Duskwood forest"
+          "src": "assets/projects/hollowstone/v02-day.jpg",
+          "caption": "Morning sun, real shadows, swaying Bellgrass and a cottage at the edge of Duskwood"
+        },
+        {
+          "src": "assets/projects/hollowstone/v02-sunset.jpg",
+          "caption": "Sunset through the Duskwood canopy, with bloom on the sun"
+        },
+        {
+          "src": "assets/projects/hollowstone/v02-night.jpg",
+          "caption": "Night: stars, moonlit clouds, fireflies and Glowcaps"
+        },
+        {
+          "src": "assets/projects/hollowstone/v02-hollow.jpg",
+          "caption": "A hollow lit by Lumen crystals and Glowcaps, with drifting motes"
         },
         {
           "src": "assets/projects/hollowstone/hollow.jpg",
-          "caption": "Deep in a hollow: Lumen crystals light the slate caverns"
-        },
-        {
-          "src": "assets/projects/hollowstone/landscape.jpg",
-          "caption": "Duskwood forest rolling toward the peaks"
+          "caption": "The hollows in 0.1, before the lighting overhaul"
         }
       ],
       "features": [
         {
-          "title": "Endless seeded worlds",
-          "text": "16×16×128 chunks streamed in around you. The same seed always makes the same world."
+          "title": "Day and night",
+          "text": "The sun and moon cross the sky, with sunsets, stars and a sky that changes colour through the day."
+        },
+        {
+          "title": "Real-time shadows",
+          "text": "Sunlight and moonlight cast soft shadows from terrain, trees and anything you build."
+        },
+        {
+          "title": "Living water",
+          "text": "Rippling waves that reflect the sky and catch glints of sunlight."
+        },
+        {
+          "title": "Wind",
+          "text": "Leaves, grass and flowers sway in the breeze."
+        },
+        {
+          "title": "The hollows",
+          "text": "Deep caverns lit by Lumen crystals and Glowcaps, with drifting motes of light."
+        },
+        {
+          "title": "Glow and bloom",
+          "text": "HDR rendering with bloom: crystals, mushrooms and the sun really shine."
+        },
+        {
+          "title": "Flora",
+          "text": "Bellgrass, Emberbloom, Frostbell and luminous Glowcaps grow across the biomes."
+        },
+        {
+          "title": "Feels good",
+          "text": "Held block, view bob, sprint zoom, break particles and fireflies at night."
         },
         {
           "title": "Seven biomes",
           "text": "Meadow, violet Duskwood, Dunes, Frostland, Peaks, Shore and Ocean."
         },
         {
-          "title": "The hollows",
-          "text": "Huge caverns deep underground, lit by Lumen crystals whose light spreads across the walls."
+          "title": "Smooth streaming",
+          "text": "Chunks are meshed on background threads (Web Workers)."
         },
         {
-          "title": "Dig and build",
-          "text": "Break, place and pick blocks, with a hotbar and a block picker."
+          "title": "23 original blocks",
+          "text": "Every texture painted by code. No borrowed assets."
         },
         {
-          "title": "Original blocks and art",
-          "text": "19 blocks, every texture painted by code. No borrowed assets."
-        },
-        {
-          "title": "Soft lighting",
-          "text": "Smooth ambient occlusion and sky light: caves are dark, so the crystals matter."
-        },
-        {
-          "title": "Move how you like",
-          "text": "Walk, sprint, sneak (without falling off edges), swim, or double-tap Space to fly."
-        },
-        {
-          "title": "Saves itself",
-          "text": "Worlds save automatically in your browser. Create, play and delete as many as you like."
+          "title": "Fancy or Fast",
+          "text": "Press G to switch graphics modes for older machines."
         }
       ],
       "roadmapSource": "hollowstone",
       "roadmapDraft": false,
-      "cover": "assets/projects/hollowstone/build.jpg"
+      "cover": "assets/projects/hollowstone/v02-day.jpg"
     },
     {
       "id": "xenohold",

@@ -105,6 +105,60 @@
       "tag": "engine"
     },
     {
+      "title": "Real-time sun and moon shadows",
+      "milestone": "m5",
+      "status": "done",
+      "tag": "render"
+    },
+    {
+      "title": "Animated water with sky reflections",
+      "milestone": "m5",
+      "status": "done",
+      "tag": "render"
+    },
+    {
+      "title": "HDR bloom, ACES tone mapping",
+      "milestone": "m5",
+      "status": "done",
+      "tag": "render"
+    },
+    {
+      "title": "Pixel clouds",
+      "milestone": "m5",
+      "status": "done",
+      "tag": "render"
+    },
+    {
+      "title": "Wind sway on leaves and plants",
+      "milestone": "m5",
+      "status": "done",
+      "tag": "render"
+    },
+    {
+      "title": "Flora: Bellgrass, Emberbloom, Frostbell, Glowcap",
+      "milestone": "m4",
+      "status": "done",
+      "tag": "content"
+    },
+    {
+      "title": "Fireflies and hollow motes",
+      "milestone": "m5",
+      "status": "done",
+      "tag": "render"
+    },
+    {
+      "title": "Held block, view bob, sprint FOV, break particles",
+      "milestone": "m2",
+      "status": "done",
+      "tag": "feel"
+    },
+    {
+      "title": "Cinematic title screen",
+      "milestone": "m7",
+      "status": "done",
+      "tag": "ui"
+    },
+    {
       "title": "Gradient sky dome",
       "milestone": "m5",
       "status": "done",
@@ -125,7 +179,7 @@
     {
       "title": "Mesh generation in Web Workers",
       "milestone": "m1",
-      "status": "doing",
+      "status": "done",
       "tag": "perf"
     },
     {
@@ -197,7 +251,7 @@
     {
       "title": "Day/night cycle and sky",
       "milestone": "m5",
-      "status": "todo",
+      "status": "done",
       "tag": "world"
     },
     {

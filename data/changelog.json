@@ -7,7 +7,74 @@
       "items": [
         {
           "type": "added",
-          "text": "Next: Web Worker meshing, survival mining, day/night."
+          "text": "Next: survival mining, inventory, sound."
+        }
+      ]
+    },
+    {
+      "version": "0.2.0",
+      "date": "2026-11-23",
+      "title": "The Light Update",
+      "items": [
+        {
+          "type": "added",
+          "text": "Day and night cycle with sun, moon, stars and sunsets; day length and time of day in settings."
+        },
+        {
+          "type": "added",
+          "text": "Real-time shadows from the sun and moon."
+        },
+        {
+          "type": "added",
+          "text": "Animated water: waves, sky reflections, sun glints."
+        },
+        {
+          "type": "added",
+          "text": "HDR rendering with bloom and ACES tone mapping."
+        },
+        {
+          "type": "added",
+          "text": "Pixel-edged clouds drifting across the sky."
+        },
+        {
+          "type": "added",
+          "text": "Wind: leaves and plants sway."
+        },
+        {
+          "type": "added",
+          "text": "Flora: Bellgrass, Emberbloom, Frostbell and the glowing Glowcap (also grows in the hollows)."
+        },
+        {
+          "type": "added",
+          "text": "Fireflies at night; drifting light motes in the hollows."
+        },
+        {
+          "type": "added",
+          "text": "Held block, view bob, sprint FOV kick, block-break particles."
+        },
+        {
+          "type": "added",
+          "text": "Cinematic flyover behind the title screen."
+        },
+        {
+          "type": "added",
+          "text": "Graphics setting: Fancy / Fast (press G)."
+        },
+        {
+          "type": "changed",
+          "text": "Chunk meshing runs on background Web Workers."
+        },
+        {
+          "type": "changed",
+          "text": "Default render distance is now 8 chunks."
+        },
+        {
+          "type": "fixed",
+          "text": "Chunks could fail to appear when every mesh worker was busy."
+        },
+        {
+          "type": "fixed",
+          "text": "Switching worlds could leave stray chunks from the previous world."
         }
       ]
     },

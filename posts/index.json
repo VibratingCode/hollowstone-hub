@@ -2,6 +2,17 @@
   "_help": "Newest first. file is the markdown file in /posts.",
   "posts": [
     {
+      "slug": "devlog-2-the-light-update",
+      "title": "Devlog #2: The Light Update",
+      "date": "2026-11-23",
+      "tags": [
+        "release",
+        "rendering"
+      ],
+      "summary": "Hollowstone 0.2 adds day and night, real shadows, living water, bloom, wind, fireflies and glowing flora.",
+      "file": "2026-11-23-devlog-2.md"
+    },
+    {
       "slug": "devlog-1-first-playable",
       "title": "Devlog #1: First playable build",
       "date": "2026-11-23",
