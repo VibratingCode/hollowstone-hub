@@ -207,7 +207,7 @@
     const p = posts.posts[idx];
     const md = await load("posts/" + p.file, true);
     const newer = posts.posts[idx - 1], older = posts.posts[idx + 1];
-    document.title = p.title + " · " + document.title.split(" · ").pop();
+    document.title = p.title + " · " + (site ? site.name : "Dev Hub");
     return '<article class="prose post">' +
       '<a class="back" href="#/devlog">← Devlog</a>' +
       '<div class="meta">' + fmtDate(p.date) + " " + tagList(p.tags) + "</div>" +
